@@ -1,0 +1,101 @@
+# Configuration pour depscan
+
+# Niveau de log (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+log_level: INFO
+
+# Format de sortie (json, html, text)
+output_format: text
+
+# Chemin du fichier de sortie (si vide, sortie standard)
+output_file: ""
+
+# Timeout pour les requêtes HTTP (en secondes)
+http_timeout: 30
+
+# Nombre maximum de retry pour les requêtes HTTP
+max_retries: 3
+
+# Délai entre les retries (en secondes)
+retry_delay: 1
+
+# API OSV
+osv:
+  # URL de base de l'API OSV
+  base_url: "https://api.osv.dev/v1"
+  # Endpoint pour les requêtes par lot
+  batch_endpoint: "/querybatch"
+  # Endpoint pour les requêtes individuelles
+  query_endpoint: "/query"
+
+# Détection automatique des projets
+detection:
+  # Rechercher récursivement dans les sous-dossiers
+  recursive: true
+  # Profondeur maximale de recherche
+  max_depth: 3
+  # Types de projets supportés
+  supported_types:
+    - python
+    - nodejs
+
+# Chemins par défaut pour les fichiers de dépendances
+default_paths:
+  python:
+    - requirements.txt
+    - pyproject.toml
+    - setup.py
+    - Pipfile
+    - Pipfile.lock
+  nodejs:
+    - package.json
+    - package-lock.json
+    - yarn.lock
+
+# Filtres de vulnérabilités
+filters:
+  # Niveaux de sévérité à inclure (low, medium, high, critical)
+  severity:
+    - low
+    - medium
+    - high
+    - critical
+  # Inclure les vulnérabilités avec exploit disponible
+  include_with_exploit: true
+  # Inclure les vulnérabilités sans exploit disponible
+  include_without_exploit: true
+  # Ignorer les vulnérabilités déjà corrigées dans des versions ultérieures
+  ignore_fixed: false
+
+# Rapport
+report:
+  # Inclure les dépendances sans vulnérabilités
+  include_safe_deps: false
+  # Trier par (severity, package_name, cvss_score)
+  sort_by: severity
+  # Ordre de tri (asc, desc)
+  sort_order: desc
+  # Limiter le nombre de résultats (0 pour aucun limite)
+  limit: 0
+  # Inclure les détails complets des vulnérabilités
+  include_full_details: true
+
+# Templates
+templates:
+  # Chemin vers le template HTML
+  html_template: "templates/report.html.j2"
+
+# Cache
+cache:
+  # Activer le cache
+  enabled: true
+  # Durée de validité du cache (en secondes)
+  ttl: 3600
+  # Chemin du répertoire de cache
+  directory: ".depscan_cache"
+
+# Validation
+validation:
+  # Valider les versions de packages
+  validate_versions: true
+  # Vérifier les formats de version
+  check_version_format: true
