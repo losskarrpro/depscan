@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dependency Vulnerability Scan Report</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        .metadata {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            background: #f1f5f9;
+            padding: 20px 40px;
+            border-bottom: 1px solid #ddd;
+        }
+        .meta-item {
+            margin: 5px 0;
+        }
+        .meta-label {
+            font-weight: 600;
+            color: #4a5568;
+        }
+        .summary {
+            padding: 30px 40px;
+            border-bottom: 1px solid #ddd;
+        }
+        .summary h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .stat-card {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid #4a6491;
+        }
+        .stat-card.critical {
+            border-left-color: #e53e3e;
+        }
+        .stat-card.high {
+            border-left-color: #ed8936;
+        }
+        .stat-card.medium {
+            border-left-color: #ecc94b;
+        }
+        .stat-card.low {
+            border-left-color: #38a169;
+        }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        .stat-label {
+            font-size: 1rem;
+            color: #718096;
+            margin-top: 5px;
+        }
+        .vulnerabilities {
+            padding: 30px 40px;
+        }
+        .vulnerabilities h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        .vuln-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .vuln-table th {
+            background-color: #4a6491;
+            color: white;
+            text-align: left;
+            padding: 15px;
+            font-weight: 600;
+        }
+        .vuln-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .vuln-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .vuln-table tr:hover {
+            background-color: #edf2f7;
+        }
+        .severity {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .severity.critical {
+            background-color: #fed7d7;
+            color: #9b2c2c;
+        }
+        .severity.high {
+            background-color: #feebc8;
+            color: #9c4221;
+        }
+        .severity.medium {
+            background-color: #fefcbf;
+            color: #744210;
+        }
+        .severity.low {
+            background-color: #c6f6d5;
+            color: #276749;
+        }
+        .package-name {
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .version {
+            font-family: monospace;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .details-link {
+            color: #4a6491;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .details-link:hover {
+            text-decoration: underline;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #718096;
+            font-size: 0.9rem;
+            border-top: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+        .no-vulns {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+            font-size: 1.2rem;
+        }
+        .timestamp {
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dependency Vulnerability Scan Report</h1>
+            <p class="subtitle">Generated by depscan - Open Source Vulnerability Scanner</p>
+        </header>
+
+        <div class="metadata">
+            <div class="meta-item">
+                <span class="meta-label">Project:</span> {{ project_name }}
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Project Type:</span> {{ project_type }}
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Scan Date:</span> <span class="timestamp">{{ scan_date }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Total Dependencies:</span> {{ total_dependencies }}
+            </div>
+        </div>
+
+        <section class="summary">
+            <h2>Scan Summary</h2>
+            <div class="stats">
+                <div class="stat-card critical">
+                    <div class="stat-value">{{ summary.critical }}</div>
+                    <div class="stat-label">Critical Vulnerabilities</div>
+                </div>
+                <div class="stat-card high">
+                    <div class="stat-value">{{ summary.high }}</div>
+                    <div class="stat-label">High Vulnerabilities</div>
+                </div>
+                <div class="stat-card medium">
+                    <div class="stat-value">{{ summary.medium }}</div>
+                    <div class="stat-label">Medium Vulnerabilities</div>
+                </div>
+                <div class="stat-card low">
+                    <div class="stat-value">{{ summary.low }}</div>
+                    <div class="stat-label">Low Vulnerabilities</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{ summary.total }}</div>
+                    <div class="stat-label">Total Vulnerabilities</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="vulnerabilities">
+            <h2>Detected Vulnerabilities</h2>
+            {% if vulnerabilities %}
+            <table class="vuln-table">
+                <thead>
+                    <tr>
+                        <th>Package</th>
+                        <th>Version</th>
+                        <th>Vulnerability ID</th>
+                        <th>Severity</th>
+                        <th>Summary</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vuln in vulnerabilities %}
+                    <tr>
+                        <td>
+                            <span class="package-name">{{ vuln.package.name }}</span>
+                        </td>
+                        <td>
+                            <span class="version">{{ vuln.package.version }}</span>
+                        </td>
+                        <td>
+                            <code>{{ vuln.vulnerability.id }}</code>
+                        </td>
+                        <td>
+                            <span class="severity {{ vuln.severity|lower }}">{{ vuln.severity }}</span>
+                        </td>
+                        <td>
+                            {{ vuln.vulnerability.summary|truncate(80) }}
+                        </td>
+                        <td>
+                            <a class="details-link" href="{{ vuln.vulnerability.details }}" target="_blank">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="no-vulns">
+                <p>🎉 No vulnerabilities detected in the scanned dependencies.</p>
+            </div>
+            {% endif %}
+        </section>
+
+        <footer>
+            <p>Report generated by <strong>depscan</strong> using the OSV Database.</p>
+            <p>This report is for informational purposes only. Always verify vulnerabilities in your specific context.</p>
+        </footer>
+    </div>
+</body>
+</html>
