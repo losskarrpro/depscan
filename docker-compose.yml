@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  depscan:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: depscan
+    volumes:
+      - .:/app
+      - ./reports:/app/reports
+    working_dir: /app
+    command: ["python", "-m", "scanner.cli", "--help"]
+    environment:
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+    networks:
+      - depscan-network
+
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: depscan-tests
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: ["pytest", "-v", "--cov=scanner", "--cov-report=term-missing"]
+    environment:
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+    networks:
+      - depscan-network
+
+networks:
+  depscan-network:
+    driver: bridge
