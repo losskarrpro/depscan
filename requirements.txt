@@ -1,0 +1,5 @@
+toml
+requests
+tqdm
+colorama
+pyyaml
