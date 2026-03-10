@@ -1,0 +1,40 @@
+{
+  "name": "example-node-project",
+  "version": "1.0.0",
+  "description": "Exemple de projet Node.js pour tester le scanner de vulnérabilités",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "4.18.2",
+    "lodash": "4.17.21",
+    "axios": "0.27.2",
+    "moment": "2.29.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "uuid": "8.3.2",
+    "chalk": "4.1.2",
+    "commander": "9.4.1",
+    "dotenv": "16.0.3"
+  },
+  "devDependencies": {
+    "jest": "29.3.1",
+    "eslint": "8.28.0",
+    "nodemon": "2.0.20",
+    "webpack": "5.75.0",
+    "typescript": "4.9.4"
+  },
+  "keywords": ["example", "test", "vulnerability-scanner"],
+  "author": "DepsScan Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/example/deps-scan-examples.git"
+  },
+  "bugs": {
+    "url": "https://github.com/example/deps-scan-examples/issues"
+  },
+  "homepage": "https://github.com/example/deps-scan-examples#readme"
+}
